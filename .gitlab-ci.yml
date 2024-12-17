@@ -1,0 +1,61 @@
+stages:
+  - build
+
+# Build stage for frontend
+build-frontend:
+  stage: build
+  image: node:14
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build
+
+# Build stage for backend microservices
+build-backend-gateway_PasswordChecker:
+  stage: build
+  image: openjdk:21
+  script:
+    - cd backend/gateway_PasswordChecker
+    - chmod +x ./mvnw
+    - ./mvnw clean package
+  artifacts:
+    paths:
+      - backend/gateway_PasswordChecker/target/*.jar
+
+build-backend-eurekaServer_PasswordChecker:
+  stage: build
+  image: openjdk:21
+  script:
+    - cd backend/eurekaServer_PasswordChecker
+    - chmod +x ./mvnw
+    - ./mvnw clean package
+  artifacts:
+    paths:
+      - backend/eurekaServer_PasswordChecker/target/*.jar
+
+build-backend-userService_PasswordChecker:
+  stage: build
+  image: openjdk:21
+  script:
+    - cd backend/userService_PasswordChecker
+    - chmod +x ./mvnw
+    - ./mvnw clean package
+  artifacts:
+    paths:
+      - backend/userService_PasswordChecker/target/*.jar
+  variables:
+    SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+
+build-backend-passwordCheck_PasswordChecker:
+  stage: build
+  image: openjdk:21
+  script:
+    - cd backend/passwordCheck_PasswordChecker
+    - chmod +x ./mvnw
+    - ./mvnw clean package
+  artifacts:
+    paths:
+      - backend/passwordCheck_PasswordChecker/target/*.jar
