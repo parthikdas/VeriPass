@@ -1,6 +1,6 @@
 stages:
   - build
- 
+
 # Build stage for frontend
 build-frontend:
   stage: build
